@@ -153,7 +153,7 @@ int minimum::FindN(double &fib3)
 //метод фибоначчи
 void minimum::Fibonachi(std::ofstream &output)
 {
-	double a0 = -2, b0 = 20;
+	double a0 = -2, b0 = 3;
 	double fun1, fun2, fibMax = 0;
 	double length = 0, lengthprev = b0 - a0, lengthconst = b0 - a0;
 	int num = 0, k = 2;
@@ -174,15 +174,16 @@ void minimum::Fibonachi(std::ofstream &output)
 	fun1 = Func(x1);
 	fun2 = Func(x2);
 	//в зависимости от значения в x, отсекаем правую или левую часть отрезка
-	if (fun1 > fun2)
-	{
-		a = x1;
-		flag = 2;
-	}
-	else
+	if (fun1 < fun2)
 	{
 		b = x2;
 		flag = 1;
+
+	}
+	else
+	{
+		a = x1;
+		flag = 2;
 	}
 	length = b - a;
 	output << "1" << "\t" << a << "\t" << b << "\t" << b - a << "\t" << lengthprev / length << std::endl;
@@ -192,6 +193,7 @@ void minimum::Fibonachi(std::ofstream &output)
 		//по свойствам последовательности фибоначчи в зависимости от того, какой отрезок мы отсекли
 		//присваем одному из иксов предыдущее значение другого икса, и значение функции
 		//соответственно
+
 		if (flag == 1) 
 		{
 			x2 = x1;
@@ -206,16 +208,23 @@ void minimum::Fibonachi(std::ofstream &output)
 			fun1 = fun2;
 			fun2 = Func(x2);
 		}
-
-		if (fun1 > fun2)
+		if (k == num)
 		{
-			a = x1;
-			flag = 2;
+			output << k << "\t" << x1 << "\t" << abs(x1 - 2.0) << "\t" << x1 - eps  << "\t" << x1 + eps <<  std::endl;
+			break;
 		}
 		else
 		{
-			b = x2;
-			flag = 1;
+			if (fun1 < fun2)
+			{
+				b = x2;
+				flag = 1;
+			}
+			else
+			{
+				a = x1;
+				flag = 2;
+			}
 		}
 		length = b - a;
 		output << k << "\t" << a << "\t" << b << "\t" << b - a << "\t" << lengthprev / length << std::endl;
@@ -235,7 +244,7 @@ void minimum::minInter(double x0, std::ofstream &output)
 	for (eps = 0.1; eps > 1e-15; eps/=10)
 	{
 		output << eps << std::endl;
-		for (x0 = -10.0; x0 < 11; x0++)
+		for (x0 = 1.999; x0 < 11; x0++)
 		{
 			fun1 = Func(x0);
 			fun2 = Func(x0 + eps);
